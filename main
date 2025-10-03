@@ -1,0 +1,11 @@
+# main.py
+
+from config import SOURCE_DIR, TARGET_DIR_SINGLE, TARGET_DIR_MULTI
+from resize_utils import single_thread_resize, multi_thread_resize
+
+if __name__ == "__main__":
+    print(" Running Single-Threaded Resizing...")
+    single_thread_resize(SOURCE_DIR, TARGET_DIR_SINGLE)
+    
+    print("\n Running Multi-Threaded Resizing...")
+    multi_thread_resize(SOURCE_DIR, TARGET_DIR_MULTI)
