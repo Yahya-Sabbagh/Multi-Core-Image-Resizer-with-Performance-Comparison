@@ -1,0 +1,11 @@
+# config.py
+
+# Source directory containing original images
+SOURCE_DIR = "C:/../../../Cars_Original"
+
+# Target directories for resized images
+TARGET_DIR_SINGLE = "Cars_Resized_Single"
+TARGET_DIR_MULTI = "Cars_Resized_Multi"
+
+# Resize dimensions
+RESIZE_SIZE = (256, 256)
