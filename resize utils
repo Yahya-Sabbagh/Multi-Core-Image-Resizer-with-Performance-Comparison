@@ -1,0 +1,43 @@
+# resize_utils.py
+
+import os
+from PIL import Image
+from multiprocessing import Pool, cpu_count
+import time
+from config import RESIZE_SIZE
+
+def resize_image(image_path, save_dir, size=RESIZE_SIZE):
+    """Open an image, resize it, and save to target directory."""
+    img = Image.open(image_path)
+    img = img.resize(size, Image.ANTIALIAS)
+    img.save(os.path.join(save_dir, os.path.basename(image_path)))
+
+def single_thread_resize(source_dir, target_dir):
+    """Resize images sequentially."""
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+    
+    start_time = time.time()
+    for img_file in os.listdir(source_dir):
+        img_path = os.path.join(source_dir, img_file)
+        if os.path.isfile(img_path):
+            resize_image(img_path, target_dir)
+    end_time = time.time()
+    
+    print(f"Single-threaded Execution Time: {end_time - start_time:.2f} seconds")
+
+def multi_thread_resize(source_dir, target_dir):
+    """Resize images in parallel using all CPU cores."""
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+    
+    image_paths = [os.path.join(source_dir, img_file) 
+                   for img_file in os.listdir(source_dir) 
+                   if os.path.isfile(os.path.join(source_dir, img_file))]
+    
+    start_time = time.time()
+    with Pool(cpu_count()) as pool:
+        pool.starmap(resize_image, [(img_path, target_dir) for img_path in image_paths])
+    end_time = time.time()
+    
+    print(f"Multi-threaded Execution Time (Using {cpu_count()} CPUs): {end_time - start_time:.2f} seconds")
